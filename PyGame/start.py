@@ -1,4 +1,10 @@
 
+## STARTING MENU ##
+
+#=============================================================================================================================#
+#=============================================================================================================================#
+
+
 #importing modules
 
 import pygame
@@ -56,10 +62,13 @@ def recordnames(p1name,p2name):
             
     scoresfile.close()    
     
-#--------------------------
+#=============================================================================================================================#
+#=============================================================================================================================#
 
-#a button class for all the buttons that would be displayed
+##CLASSES
+
     
+# a super class boxes from which i can make different types of boxes    
 class boxes:
     def __init__(self, x,y,height,width,color):
         self.x = x
@@ -68,22 +77,25 @@ class boxes:
         self.width = width
         self.color = color
 
-    def isOver(self, pos):
+    def isOver(self, pos):  # checks the mouse position, if mouse position is over this box, it would return as True
         if pos[0] > self.x and pos[0] < self.x + self.width:
             if pos[1] > self.y and pos[1] < self.y + self.height:
                 return True
             
         return False
 
+#--------------------------
+    
+# Button class for all the buttons throughout the game
 
 class button(boxes):   
     def __init__(self, x,y,height,width, color,text=''):
-        super().__init__(x,y,height,width,color)
+        super().__init__(x,y,height,width,color) #inherits those attributes from boxes class
         self.text = text
 
 
-    def draw(self,screen,outline=None):
-        if outline:
+    def draw(self,screen,outline=None): #draws the button, and adds text and outline if there is any
+        if outline: 
             pygame.draw.rect(screen, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
             
         pygame.draw.rect(screen, self.color, (self.x,self.y,self.width,self.height),0)
@@ -94,17 +106,19 @@ class button(boxes):
             screen.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
    
-
+#--------------------------
 
 class inputboxes(boxes):
-    def __init__(self,x,y,height,width,color):
+    def __init__(self,x,y,height,width,color): #inherits those attributes from boxes class
         super().__init__(x,y,height,width,color)
-        self.active = False
+        self.active = False #if its selected
         
     def draw(self):
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.x,self.y,self.width,self.height),5)
+        pygame.draw.rect(screen, self.color, pygame.Rect(self.x,self.y,self.width,self.height),5) #draws the input boxes on screen
+        
                          
-#--------------------------
+#=============================================================================================================================#
+#=============================================================================================================================#
 
 #defining the games framerate
 
@@ -127,23 +141,24 @@ backgroundimg = pygame.image.load('lightbackground.png')
 background = pygame.transform.scale (backgroundimg, (width, height))
 
 
-#--------------------------
+#=============================================================================================================================#
+#=============================================================================================================================#
 
 #functions for fading the screen after user presses a button (different functions for different screens)
 
 def fade(width, height): 
     fade = pygame.Surface((width, height))
-    fade.fill((0,0,0))
+    fade.fill((0,0,0)) #fills the screen with black and then redraws the image over it slowly
     opacity = 0
     for o in range(0, 40):
         opacity += 10
-        fade.set_alpha(opacity)
+        fade.set_alpha(opacity) #increases opacity as it displaying the black screen giving the effect of a fade
         drawmain()
         screen.blit(fade, (0,0))
         pygame.display.update()
         pygame.time.delay(1)
 
-
+#same as above but different for each screen/game loop
 def fadeback(width, height):
     fade = pygame.Surface((width, height))
     fade.fill((0,0,0))
@@ -156,9 +171,7 @@ def fadeback(width, height):
         pygame.display.update()
         pygame.time.delay(1)
     
-    
-    
-    
+
 def fadetutorial(width,height):
     fade = pygame.Surface((width, height))
     fade.fill((0,0,0))
@@ -172,14 +185,15 @@ def fadetutorial(width,height):
         pygame.time.delay(1)
 
 
-#--------------------------
+#=============================================================================================================================#
+#=============================================================================================================================#
     
     
     
 #****************************************#
 #                                        #
 #                                        #
-#           MAIN PROGRAM                 #
+#             MAIN PROGRAM               #
 #                                        #
 #                                        #
 #****************************************#
@@ -190,7 +204,7 @@ def fadetutorial(width,height):
 
 
 
-#function to store everything that happens in the main loop (starting screen)
+#function to draw everything needed in the main loop (starting screen)
 
 def drawmain():
     screen.blit(background, (0,0))
@@ -231,28 +245,29 @@ def mainprogram():
         
         
         for event in pygame.event.get():
-            pos = pygame.mouse.get_pos()
+            pos = pygame.mouse.get_pos() #gets the mouse position
             
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if playbutton.isOver(pos):
-                    print("play")
-                    fade(width,height)
-                    inputwindow()
+            if event.type == pygame.MOUSEBUTTONDOWN: #if the mouse button is pressed
+                if playbutton.isOver(pos): #while its pressed, if its over the play button:
+                    #print("play")
+                    fade(width,height) #use the fade function to transition
+                    inputwindow() #runs the input window screen
                     
-                if leaderboardbutton.isOver(pos):
-                    print("leaderboard")
-                    fade(width,height)
-                    import leaderboard
+                if leaderboardbutton.isOver(pos): #if the mouse is over leaderboard button
+                    #print("leaderboard")
+                    fade(width,height) #fade transition
+                    import leaderboard # run the leaderboard.py file
                     
-                if exitbutton.isOver(pos):
-                    fade(width,height)
-                    finished = True
+                if exitbutton.isOver(pos): #if the mouse button is over the exit button
+                    fade(width,height) #fade transition
+                    finished = True #stops the main loop and quits
             
             if event.type == pygame.MOUSEMOTION:
+                #if the mouse is over any of the buttons, change their colour to show that their being hovered
                 if playbutton.isOver(pos):
                     playbutton.color = (WHITE)
                 elif leaderboardbutton.isOver(pos):
@@ -270,8 +285,10 @@ def mainprogram():
         pygame.display.update()
     
     pygame.quit()
+
     
-#-------------------------------------------------------------------------------------------------------------
+#=============================================================================================================================#
+#=============================================================================================================================#
 
 
 
@@ -279,25 +296,26 @@ def mainprogram():
 
 
 
-#function to store everything that goes in the enter names screen    
+#function to draw everything that goes in the enter names screen    
     
 error = 0   
     
 def nameswindowdraw(p1name,p2name,error):
         font=pygame.font.SysFont('comicsans',44)
     
-        if error == 0:
+        if error == 0: #if there is no error
             enternamep1= ("Please enter player 1 name here: (max 10 chars)")
             enternamep2= ("Please enter player 2 name here: (max 10 chars)")
-        elif error == 1:
+        elif error == 1: #if there is an error with the 1st input box
             enternamep1= ("Error, try again (max 10 chars)")
             enternamep2= ("Please enter player 2 name here:")
-        elif error == 2:
+        elif error == 2: #if there is an error with the 2nd input box
             enternamep1= ("Please enter player 1 name here:")
             enternamep2= ("Error, try again (max 10 chars)")
-        elif error == 3:
+        elif error == 3: #if both the names are same
             enternamep1= ("Please enter player 1 name here:")
             enternamep2= ("Error, try again (names can't be the same)")
+            
         screen.blit(background, (0,0))
 
         pygame.draw.rect(screen, (RED), (75, 75, 1080, 450))
@@ -340,22 +358,22 @@ def inputwindow():
     finished = False
     
 
-    p1name = ''
+    p1name = '' #where the user input will be scored
     p2name = ''
     
 
     while finished == False:
         
-        nameswindowdraw(p1name, p2name,0)
+        nameswindowdraw(p1name, p2name,0) #run the function above to draw all the objects
         
-
+        #if x top corner is pressed
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-
+            #change the colour of the box to show that its selected
             if p1box.active == True:
                 p1box.color = WHITE
 
@@ -368,8 +386,8 @@ def inputwindow():
             elif p2box.active == False:
                 p2box.color = BLACK
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if p1box.isOver(pos):
+            if event.type == pygame.MOUSEBUTTONDOWN: # when the mouse button is pressed
+                if p1box.isOver(pos): # when the mouse button is pressed and the mouse is over a box then the respective .active becomes true
                     p1box.active=True
                     p2box.active=False
 
@@ -380,62 +398,65 @@ def inputwindow():
                 else:
                     p1box.active=False
                     p2box.active=False
-                    
+
+                #if they press the next button  
                 if nextbutton.isOver(pos):
-                    if (len(p1name)) > 10 or (len(p1name)) == 0:
+                    if (len(p1name)) > 10 or (len(p1name)) == 0: #checking if the player 1 input is empty or over 10 characters
 
-                        nameswindowdraw(p1name,p2name,1)
-                        print(len(p1name))
+                        nameswindowdraw(p1name,p2name,1) #if it is, run the draw program with the respective error message
+                        #print(len(p1name))
                         pygame.display.update()
-                        #time.sleep(2)
+                        time.sleep(2) #pause the game for 2 seconds and then switch back to the normal screen the next time the loop is run
                         
-                    elif (len(p2name)) > 10 or (len(p2name)) == 0:
+                    elif (len(p2name)) > 10 or (len(p2name)) == 0: #checking if the player 2 input is empty or over 10 characters
 
-                        nameswindowdraw(p1name,p2name,2)
+                        nameswindowdraw(p1name,p2name,2) #if it is, run the draw program with the respective error message
+                        #print(len(p2name))
+                        pygame.display.update()
+                        time.sleep(2) #pause the game for 2 seconds and then switch back to the normal screen the next time the loop is run
+
+                    elif p1name == p2name: #checking if both the names are the same
+
+                        nameswindowdraw(p1name,p2name,3) #if it is run the draw program with the respective error message
                         print(len(p2name))
                         pygame.display.update()
-                        #time.sleep(2)
-
-                    elif p1name == p2name:
-
-                        nameswindowdraw(p1name,p2name,3)
-                        print(len(p2name))
-                        pygame.display.update()
-                        #time.sleep(2)
+                        time.sleep(2)
                         
-                    else:
-                        fadeback(width,height)
+                    else: # if the inputs pass all the validation checks
+
+                        fadeback(width,height) #fade transition
                     
-                        playernames.append(p1name)
-                        playernames.append(p2name)
-                        print (playernames)
-                        print(p1name,len(p1name))
-                        print(p2name,len(p2name))
-                        tutorialwindow()
+                        playernames.append(p1name) #add names to the playernames list
+                        playernames.append(p2name) 
+                        #print (playernames)
+                        #print(p1name,len(p1name))
+                        #print(p2name,len(p2name))
+                        tutorialwindow() #run the tutorial window screen
                     
-                elif backbutton.isOver(pos):
-                    fadeback(width,height)
-                    mainprogram()
+                elif backbutton.isOver(pos): #if they press the back button: 
+                    fadeback(width,height) #fade
+                    mainprogram() #run the starting screen
                     
                     
-            if event.type == pygame.KEYDOWN:
-                if p1box.active == True:
-                    if event.key == pygame.K_BACKSPACE:
-                        p1name = p1name[:-1]
-                    elif event.key == pygame.K_RETURN or event.key == pygame.K_TAB:
+            if event.type == pygame.KEYDOWN: #checking if the end user is typing
+                
+                #if they're typing, and the 1st box is selected
+                if p1box.active == True: 
+                    if event.key == pygame.K_BACKSPACE: #check if they pressed backspace
+                        p1name = p1name[:-1] #take away the last character
+                    elif event.key == pygame.K_RETURN or event.key == pygame.K_TAB: # if tab or enter is pressed, deselect the first box and select the 2nd box
                         p1box.active = False
-                        p2box.active = True
-                        
-                        
-
-                    else:
-                        p1name += event.unicode
+                        p2box.active = True    
     
+                    else: #if any other keys are pressed
+                        p1name += event.unicode #add the key to the string
+
+                #same as above but for the 2nd box
                 elif p2box.active == True:
                     if event.key == pygame.K_BACKSPACE:
                         p2name = p2name[:-1]
                         
-                    elif event.key == pygame.K_RETURN or event.key == pygame.K_TAB:
+                    elif event.key == pygame.K_RETURN or event.key == pygame.K_TAB: #deselect both the boxes
                         p1box.active = False
                         p2box.active = False
 
@@ -445,8 +466,8 @@ def inputwindow():
                         
                 
 
-
-            if event.type == pygame.MOUSEMOTION:
+            
+            if event.type == pygame.MOUSEMOTION: #check if mouse is hovering over any buttons, if they are change colour to show they're selected
                 if nextbutton.isOver(pos):
                     nextbutton.color = (WHITE)
                 elif backbutton.isOver(pos):
@@ -462,13 +483,14 @@ def inputwindow():
         pygame.display.update()
 
 
-#-------------------------------------------------------------------------------------------------------------                    
+#=============================================================================================================================#
+#=============================================================================================================================#                    
 
 
 #INSTRUCTION_SCREEN
         
 
-#function to store everything that goes in the instruction/tutorial window    
+#function to draw everything that goes in the instruction/tutorial window    
     
     
 def drawtutorialwindow():  
@@ -484,7 +506,7 @@ def drawtutorialwindow():
     
     hello = font.render("hello", True, (WHITE))
     
-    names1 = font.render(playernames[0],True,(WHITE))
+    names1 = font.render(playernames[0],True,(WHITE)) #getting the names from the list
     names2 = font.render(playernames[1],True,(WHITE))
 
 
@@ -509,7 +531,7 @@ def drawtutorialwindow():
 
 
 
-#running the images that i need through the transform and transperancy function
+#running the images that through the transform and transperancy function
 
 arrow = getimage(arrower)
 wasd = getimage(wasder)
@@ -525,7 +547,7 @@ def tutorialwindow():
         
     while finished == False:
         
-        drawtutorialwindow()
+        drawtutorialwindow() #draw everything from the function above
 
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
@@ -533,35 +555,34 @@ def tutorialwindow():
                 pygame.quit()
                 sys.exit()
                 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN: #if the next buttons pressed:
                 if nextbutton.isOver(pos):
-                    fadetutorial(width,height)
-                    recordnames(playernames[0],playernames[1])
+                    fadetutorial(width,height)#fade
+                    recordnames(playernames[0],playernames[1]) #store the names of the players using the function
+ 
+                    import main  #run the main.py file
                     
                     
                     
-                    import main
-                    
-                    
-                    
-            if event.type == pygame.MOUSEMOTION:
+            if event.type == pygame.MOUSEMOTION: #change colour if hovering
                 if nextbutton.isOver(pos):
                     nextbutton.color = (WHITE)
                 else:
                     nextbutton.color = (RED)
                     
-        pygame.display.update()
+        pygame.display.update() #updates the display everytime the loop is run
         
         clock.tick(FPS)
-
-#---------------------------------------------------------------------------------------------------------------------#
-
         
-#--------------------------------------   
+#=============================================================================================================================#
+#=============================================================================================================================#      
+  
 #Running the starting screen loop to start the game#
 
-if __name__ == "__main__":
-    mainprogram()
+if __name__ == "__main__": #only runs the file when the file is run from within the file
+    #this is because i import some of the functions from here in another file and i dont want it to run the file there
+    
+    mainprogram() #run the starting screen program
                     
         
 
