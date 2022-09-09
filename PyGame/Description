@@ -1,0 +1,10 @@
+In this project, I will be developing a two-player 90-second-long football game. 
+With this, I also aim to include a leaderboard so all the winners can see the highest goal difference they won by.
+They would also be able to search for their name and sort the leaderboard to see the highest goal difference players have won by. 
+The end-user of my program would be any person of any age looking for a little break/entertainment with their friend.
+More specifically, it would appeal to football fans and a younger audience.
+The leaderboard adds a competitive element to the game as you could even compete to be the best through the leaderboard by achieving the highest goal differences.
+This application would be very user-friendly, ensuring people of all ages are able to play it without any problems. 
+This project meets the need for an advanced higher project as it will be connected to a database which stores all the names and respective scores which would be then displayed on the leaderboard.
+This would be done using SQL queries to calculate the winners and goaldifference. End users would also be able to sort the list and search for their name.
+This would be done using bubble sort and binary search algorithms.
